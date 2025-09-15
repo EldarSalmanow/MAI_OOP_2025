@@ -42,5 +42,5 @@ cmake-build-release-wsl
 *.out
 *.app
 
-# debug information files
+# Debug information files
 *.dwo
