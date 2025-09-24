@@ -22,82 +22,84 @@ function(setup_project)
     enable_testing()
 endfunction()
 
-function(add_task TASK_NUM)
+function(add_lab LAB_NUM)
     # Parsing arguments
 
     cmake_parse_arguments(ARG "" "" "CLI_SOURCES;LIB_SOURCES;TEST_SOURCES" ${ARGN})
 
-    set(TASK${TASK_NUM}_CLI_SOURCES)
+    set(LAB${LAB_NUM}_CLI_SOURCES)
     foreach(SOURCE ${ARG_CLI_SOURCES})
         list(APPEND
-                TASK${TASK_NUM}_CLI_SOURCES
+                LAB${LAB_NUM}_CLI_SOURCES
                 ${CLI_DIR}/${SOURCE}
         )
     endforeach()
 
-    set(TASK${TASK_NUM}_LIB_SOURCES)
+    set(LAB${LAB_NUM}_LIB_SOURCES)
     foreach(SOURCE ${ARG_LIB_SOURCES})
         list(APPEND
-                TASK${TASK_NUM}_LIB_SOURCES
-                ${SOURCE_DIR}/task${TASK_NUM}/${SOURCE}
+                LAB${LAB_NUM}_LIB_SOURCES
+                ${SOURCE_DIR}/lab${LAB_NUM}/${SOURCE}
         )
     endforeach()
 
-    set(TASK${TASK_NUM}_TEST_SOURCES)
+    set(LAB${LAB_NUM}_TEST_SOURCES)
     foreach(SOURCE ${ARG_TEST_SOURCES})
         list(APPEND
-                TASK${TASK_NUM}_TEST_SOURCES
+                LAB${LAB_NUM}_TEST_SOURCES
                 ${TESTS_DIR}/${SOURCE}
         )
     endforeach()
 
     # Adding library
 
-    add_library(task${TASK_NUM}_lib
-            ${TASK${TASK_NUM}_LIB_SOURCES}
+    add_library(lab${LAB_NUM}_lib
+            ${LAB${LAB_NUM}_LIB_SOURCES}
     )
 
-    target_include_directories(task${TASK_NUM}_lib
+    target_include_directories(lab${LAB_NUM}_lib
             PRIVATE
             ${INCLUDE_DIR}
     )
 
     # Adding CLI app
 
-    add_executable(task${TASK_NUM}
-            ${TASK${TASK_NUM}_CLI_SOURCES}
-    )
+    if (LAB${LAB_NUM}_CLI_SOURCES)
+        add_executable(lab${LAB_NUM}
+                ${LAB${LAB_NUM}_CLI_SOURCES}
+        )
 
-    target_include_directories(task${TASK_NUM}
-            PRIVATE
-            ${INCLUDE_DIR}
-    )
+        target_include_directories(lab${LAB_NUM}
+                PRIVATE
+                ${INCLUDE_DIR}
+        )
 
-    target_link_libraries(task${TASK_NUM}
-            PRIVATE
-            task${TASK_NUM}_lib
-    )
+        target_link_libraries(lab${LAB_NUM}
+                PRIVATE
+                lab${LAB_NUM}_lib
+        )
+    endif()
 
     # Adding tests
 
-    add_executable(task${TASK_NUM}_test
-            ${TASK${TASK_NUM}_TEST_SOURCES}
+    add_executable(lab${LAB_NUM}_test
+            ${LAB${LAB_NUM}_TEST_SOURCES}
     )
 
-    target_include_directories(task${TASK_NUM}_test
+    target_include_directories(lab${LAB_NUM}_test
             PRIVATE
             GTest::GTest
             ${INCLUDE_DIR}
     )
 
-    target_link_libraries(task${TASK_NUM}_test
+    target_link_libraries(lab${LAB_NUM}_test
             PRIVATE
             GTest::GTest
-            task${TASK_NUM}_lib
+            lab${LAB_NUM}_lib
     )
 
     add_test(
-            NAME task${TASK_NUM}_tests
-            COMMAND task${TASK_NUM}_test
+            NAME lab${LAB_NUM}_tests
+            COMMAND lab${LAB_NUM}_test
     )
 endfunction()

@@ -1,6 +1,4 @@
-#include <stdexcept>
-
-#include <task1/counter.h>
+#include <lab1/counter.h>
 
 std::uint8_t CountOnesInNumber(std::uint64_t number) {
     std::uint8_t count = 0;

@@ -6,8 +6,8 @@ set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(TESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
-add_task(1
-        CLI_SOURCES task1.cpp
+add_lab(1
+        CLI_SOURCES main.cpp
         LIB_SOURCES counter.cpp
-        TEST_SOURCES task1_test.cpp
+        TEST_SOURCES lab1_test.cpp
 )

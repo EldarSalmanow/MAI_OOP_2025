@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <task1/counter.h>
+#include <lab1/counter.h>
 
 TEST(CounterTests, CountOnesInNumberTests) {
     ASSERT_EQ(CountOnesInNumber(0b0), 0);
