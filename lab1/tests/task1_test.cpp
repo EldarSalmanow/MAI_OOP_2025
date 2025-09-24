@@ -7,7 +7,7 @@ TEST(CounterTests, CountOnesInNumberTests) {
     ASSERT_EQ(CountOnesInNumber(0b1), 1);
     ASSERT_EQ(CountOnesInNumber(0b101011), 4);
     ASSERT_EQ(CountOnesInNumber(0b111111), 6);
-    ASSERT_EQ(CountOnesInNumber(UINT64_C(0xffffffffffffffff)), 64);
+    ASSERT_EQ(CountOnesInNumber(0xffffffffffffffffUL), 64);
 }
 
 TEST(CounterTests, CountOnesInSequenceTests) {

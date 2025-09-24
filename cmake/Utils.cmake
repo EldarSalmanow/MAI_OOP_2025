@@ -12,6 +12,13 @@ function(setup_project)
 
     target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+    add_compile_options(
+            -Wall
+            -Werror
+            -Wextra
+            -Wpedantic
+    )
+
     enable_testing()
 endfunction()
 
