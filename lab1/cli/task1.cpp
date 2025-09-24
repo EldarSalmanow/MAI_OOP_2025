@@ -8,8 +8,8 @@ int main() {
     std::cout << "Enter a & b numbers, where 0 <= a <= b: ";
     std::cin >> a >> b;
 
-    if (a < 0
-     || b < 0) {
+    if (!((0 <= a)
+       && (a <= b))) {
         std::cout << "[ERROR] a & b numbers must satisfy the rule 0 <= a <= b!" << std::endl;
 
         return 0;

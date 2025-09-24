@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include <task1/counter.h>
 
 std::uint8_t CountOnesInNumber(std::uint64_t number) {
