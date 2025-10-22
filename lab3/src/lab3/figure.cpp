@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cstdint>
 
 #include <lab3/figure.h>
@@ -6,181 +5,40 @@
 
 Figure::~Figure() noexcept = default;
 
-Rhomb::Rhomb(const Rhomb &rhomb) {
-    std::copy_n(rhomb._coordinates, 8, _coordinates);
+std::istream &operator>>(std::istream &istream, Figure &figure) {
+    return figure.Input(istream);
 }
 
-Rhomb::Rhomb(Rhomb &&rhomb) noexcept {
-    std::move(rhomb._coordinates, rhomb._coordinates + 8, _coordinates);
+std::ostream &operator<<(std::ostream &ostream, const Figure &figure) {
+    return figure.Output(ostream);
 }
 
-std::pair<double, double> Rhomb::CenterOfRotation() const {
-    return {
-        (_coordinates[0] - _coordinates[4]) / 2,
-        (_coordinates[1] - _coordinates[5]) / 2
-    };
-}
-
-Rhomb &Rhomb::operator=(const Rhomb &rhomb) {
-    if (this == &rhomb) {
-        return *this;
-    }
-
-    std::copy_n(rhomb._coordinates, 8, _coordinates);
-
-    return *this;
-}
-
-Rhomb &Rhomb::operator=(Rhomb &&rhomb) noexcept {
-    std::move(rhomb._coordinates, rhomb._coordinates + 8, _coordinates);
-
-    return *this;
-}
-
-bool Rhomb::operator==(const Rhomb &rhomb) const {
-    for (std::uint64_t i = 0; i < 8; ++i) {
-        if (_coordinates[i] != rhomb._coordinates[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-Rhomb::operator double() const {
-    double x_y_sum = 0.0, y_x_sum = 0.0;
-
-    for (uint64_t i = 0; i < 3; ++i) {
-        x_y_sum += _coordinates[i * 2] * _coordinates[(i + 1) * 2 + 1];
-        y_x_sum += _coordinates[i * 2 + 1] * _coordinates[(i + 1) * 2];
-    }
-
-    x_y_sum += _coordinates[3 * 2] * _coordinates[1]; // x_4 * y_1
-    y_x_sum += _coordinates[3 * 2 + 1] * _coordinates[0]; // y_4 * x_1
-
-    return 0.5 * std::abs(x_y_sum - y_x_sum);
-}
-
-Pentagon::Pentagon(const Pentagon &pentagon) {
-    std::copy_n(pentagon._coordinates, 10, _coordinates);
-}
-
-Pentagon::Pentagon(Pentagon &&pentagon) noexcept {
-    std::move(pentagon._coordinates, pentagon._coordinates + 10, _coordinates);
-}
-
-std::pair<double, double> Pentagon::CenterOfRotation() const {
+Point FigureCenterOfRotation(const Point *points,
+                             std::uint64_t points_count) {
     double x_average = 0.0, y_average = 0.0;
 
-    for (std::uint64_t i = 0; i < 5; ++i) {
-        x_average += _coordinates[i * 2];
-        y_average += _coordinates[i * 2 + 1];
+    for (std::uint64_t i = 0; i < points_count; ++i) {
+        x_average += points[i].X();
+        y_average += points[i].Y();
     }
 
     return {
-            x_average / 5,
-            y_average / 5
+            x_average / static_cast<double>(points_count),
+            y_average / static_cast<double>(points_count)
     };
 }
 
-Pentagon &Pentagon::operator=(const Pentagon &pentagon) {
-    if (this == &pentagon) {
-        return *this;
-    }
-
-    std::copy_n(pentagon._coordinates, 10, _coordinates);
-
-    return *this;
-}
-
-Pentagon &Pentagon::operator=(Pentagon &&pentagon) noexcept {
-    std::move(pentagon._coordinates, pentagon._coordinates + 10, _coordinates);
-
-    return *this;
-}
-
-bool Pentagon::operator==(const Pentagon &pentagon) const {
-    for (std::uint64_t i = 0; i < 10; ++i) {
-        if (_coordinates[i] != pentagon._coordinates[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-Pentagon::operator double() const {
+double FigureArea(const Point *points,
+                  std::uint64_t points_count) {
     double x_y_sum = 0.0, y_x_sum = 0.0;
 
-    for (uint64_t i = 0; i < 4; ++i) {
-        x_y_sum += _coordinates[i * 2] * _coordinates[(i + 1) * 2 + 1];
-        y_x_sum += _coordinates[i * 2 + 1] * _coordinates[(i + 1) * 2];
+    for (uint64_t i = 0; i < points_count - 1; ++i) {
+        x_y_sum += points[i].X() * points[i + 1].Y();
+        y_x_sum += points[i].Y() * points[i + 1].X();
     }
 
-    x_y_sum += _coordinates[4 * 2] * _coordinates[1]; // x_5 * y_1
-    y_x_sum += _coordinates[4 * 2 + 1] * _coordinates[0]; // y_5 * x_1
-
-    return 0.5 * std::abs(x_y_sum - y_x_sum);
-}
-
-Hexagon::Hexagon(const Hexagon &hexagon) {
-    std::copy_n(hexagon._coordinates, 12, _coordinates);
-}
-
-Hexagon::Hexagon(Hexagon &&hexagon) noexcept {
-    std::move(hexagon._coordinates, hexagon._coordinates + 12, _coordinates);
-}
-
-std::pair<double, double> Hexagon::CenterOfRotation() const {
-    double x_average = 0.0, y_average = 0.0;
-
-    for (std::uint64_t i = 0; i < 6; ++i) {
-        x_average += _coordinates[i * 2];
-        y_average += _coordinates[i * 2 + 1];
-    }
-
-    return {
-        x_average / 6,
-        y_average / 6
-    };
-}
-
-Hexagon &Hexagon::operator=(const Hexagon &hexagon) {
-    if (this == &hexagon) {
-        return *this;
-    }
-
-    std::copy_n(hexagon._coordinates, 12, _coordinates);
-
-    return *this;
-}
-
-Hexagon &Hexagon::operator=(Hexagon &&hexagon) noexcept {
-    std::move(hexagon._coordinates, hexagon._coordinates + 12, _coordinates);
-
-    return *this;
-}
-
-bool Hexagon::operator==(const Hexagon &hexagon) const {
-    for (std::uint64_t i = 0; i < 12; ++i) {
-        if (_coordinates[i] != hexagon._coordinates[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-Hexagon::operator double() const {
-    double x_y_sum = 0.0, y_x_sum = 0.0;
-
-    for (uint64_t i = 0; i < 5; ++i) {
-        x_y_sum += _coordinates[i * 2] * _coordinates[(i + 1) * 2 + 1];
-        y_x_sum += _coordinates[i * 2 + 1] * _coordinates[(i + 1) * 2];
-    }
-
-    x_y_sum += _coordinates[5 * 2] * _coordinates[1]; // x_6 * y_1
-    y_x_sum += _coordinates[5 * 2 + 1] * _coordinates[0]; // y_6 * x_1
+    x_y_sum += points[points_count - 1].X() * points[0].Y(); // x_n * y_1
+    y_x_sum += points[points_count - 1].Y() * points[0].X(); // y_n * x_1
 
     return 0.5 * std::abs(x_y_sum - y_x_sum);
 }
