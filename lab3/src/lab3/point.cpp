@@ -1,5 +1,7 @@
 #include <lab3/point.h>
 
+#define EPSILON 1e-9
+
 
 Point::Point() = default;
 
@@ -21,8 +23,8 @@ double Point::Y() const {
 }
 
 bool Point::operator==(const Point &point) const {
-    return _x == point._x
-        && _y == point._y;
+    return (std::abs(_x - point._x) < EPSILON)
+        && (std::abs(_y - point._y) < EPSILON);
 }
 
 bool Point::operator!=(const Point &point) const {
