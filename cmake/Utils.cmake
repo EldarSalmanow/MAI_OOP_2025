@@ -53,14 +53,16 @@ function(add_lab LAB_NUM)
 
     # Adding library
 
-    add_library(lab${LAB_NUM}_lib
-            ${LAB${LAB_NUM}_LIB_SOURCES}
-    )
+    if (LAB${LAB_NUM}_LIB_SOURCES)
+        add_library(lab${LAB_NUM}_lib
+                ${LAB${LAB_NUM}_LIB_SOURCES}
+        )
 
-    target_include_directories(lab${LAB_NUM}_lib
-            PRIVATE
-            ${INCLUDE_DIR}
-    )
+        target_include_directories(lab${LAB_NUM}_lib
+                PRIVATE
+                ${INCLUDE_DIR}
+        )
+    endif()
 
     # Adding CLI app
 
@@ -95,8 +97,14 @@ function(add_lab LAB_NUM)
     target_link_libraries(lab${LAB_NUM}_test
             PRIVATE
             GTest::GTest
-            lab${LAB_NUM}_lib
     )
+
+    if (LAB${LAB_NUM}_LIB_SOURCES)
+        target_link_libraries(lab${LAB_NUM}_test
+                PRIVATE
+                lab${LAB_NUM}_lib
+        )
+    endif()
 
     add_test(
             NAME lab${LAB_NUM}_tests
